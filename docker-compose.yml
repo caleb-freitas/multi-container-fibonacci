@@ -12,11 +12,11 @@ services:
     env_file:
       - .env.development
 
-  server:
+  api:
     build:
       dockerfile: Dockerfile.dev
       context: ./server
-    container_name: server
+    container_name: api
     env_file:
       - .env.development
     volumes:
