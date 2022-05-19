@@ -12,6 +12,14 @@ services:
     env_file:
       - .env.development
 
+  nginx:
+    container_name: nginx
+    restart: always
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./nginx
+    ports:
+      - "4000:80"
   api:
     build:
       dockerfile: Dockerfile.dev
