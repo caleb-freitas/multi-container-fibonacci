@@ -22,3 +22,23 @@ services:
     volumes:
       - /home/node/app/node_modules
       - ./server:/home/node/app
+
+  client:
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./client
+    container_name: client
+    volumes:
+      - /home/node/app/node_modules
+      - ./client:/home/node/app
+
+  worker:
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./worker
+    container_name: worker
+    env_file:
+      - .env.development
+    volumes:
+      - /home/node/app/node_modules
+      - ./worker:/home/node/app
