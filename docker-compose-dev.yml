@@ -1,0 +1,55 @@
+version: "3"
+services:
+  portgres:
+    image: "postgres:latest"
+    container_name: postgres
+    env_file:
+      - .env.development
+
+  redis:
+    image: "redis:latest"
+    container_name: redis
+    env_file:
+      - .env.development
+
+  nginx:
+    container_name: nginx
+    restart: always
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./nginx
+    ports:
+      - "4000:80"
+
+  api:
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./server
+    container_name: api
+    env_file:
+      - .env.development
+    volumes:
+      - /home/node/app/node_modules
+      - ./server:/home/node/app
+
+  client:
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./client
+    container_name: client
+    environment:
+      - WDS_SOCKET_PORT=0
+    volumes:
+      - /home/node/app/node_modules
+      - ./client:/home/node/app
+
+  worker:
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./worker
+    container_name: worker
+    env_file:
+      - .env.development
+    volumes:
+      - /home/node/app/node_modules
+      - ./worker:/home/node/app
